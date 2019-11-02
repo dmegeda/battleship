@@ -3,29 +3,22 @@
   <Class Name="Battleship.BattleshipBoard">
     <Position X="7.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgAAAAIAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAIAAA=</HashCode>
+      <HashCode>AAgAAAAIAAAAAgAAEAAQCAAAAAABAAAAIQAAAAAIAAA=</HashCode>
       <FileName>BattleshipBoard.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Battleship.Ship">
     <Position X="2.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAACAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Ships\Ship.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Battleship.ShipSetter">
-    <Position X="5.25" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAgAAAAAQCAAAAABAAAQAIAAAAAAAAAA=</HashCode>
-      <FileName>ShipSetter.cs</FileName>
+      <HashCode>AAAAAAAAACAIAAAwAAAAAAEAAAAAAAAAAABgAAAAYAA=</HashCode>
+      <FileName>Ship.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Battleship.HitState" BaseTypeListCollapsed="true">
     <Position X="11.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAACAAAAAACAMAABAAAAAAAAIAAAAIAAgAAAE=</HashCode>
-      <FileName>State\Hitted.cs</FileName>
+      <HashCode>AAAAAAAAACAAAAAIAAIAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>State\HitState.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -39,41 +32,13 @@
       <Property Name="State" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Battleship.NotHittedState" BaseTypeListCollapsed="true">
+  <Class Name="Battleship.NoHitState" BaseTypeListCollapsed="true">
     <Position X="9.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>State\NotHitted.cs</FileName>
+      <FileName>State\NoHitState.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="Battleship.Battleship">
-    <Position X="1" Y="4" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Ships\Battleship.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Battleship.Boat">
-    <Position X="3.5" Y="4" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Ships\Boat.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Battleship.Cruiser">
-    <Position X="6" Y="4" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Ships\Cruiser.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Battleship.Destroyer">
-    <Position X="0.5" Y="1.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Ships\Destroyer.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Interface Name="Battleship.IShipState">
     <Position X="10.5" Y="0.75" Width="1.5" />

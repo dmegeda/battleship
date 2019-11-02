@@ -12,21 +12,19 @@ namespace Battleship
         {   
             Console.Write("Choose board size: ");
             int boardsize = Convert.ToInt32(Console.ReadLine());
-            
-            ShipSetter shipSetter = ShipSetter.getInstance();
+
             BattleshipBoard playerBoard = new BattleshipBoard(boardsize);
             BattleshipBoard botBoard = new BattleshipBoard(boardsize);
             Random r = new Random();
-            shipSetter.AddShipToBoard(playerBoard, r);
-            shipSetter.AddShipToBoard(botBoard, r);
-            ShowBoard(boardsize, playerBoard.MainBoard);
-            Console.WriteLine();
+            playerBoard.AddShipToBoard(r);
+            botBoard.AddShipToBoard(r);
             //ShowBoard(boardsize, playerBoard.MainBoard);
+            Console.WriteLine();
+            ShowBoard(boardsize, playerBoard.MainBoard);
             Console.WriteLine();
             ShowBoard(boardsize, botBoard.MainBoard);
             ConsoleKeyInfo key;
             Game g = new Game(new NoHitState());
-
             do
             {
                 key = Console.ReadKey();
@@ -35,16 +33,11 @@ namespace Battleship
                     Console.Clear();
                     
                     g.Hit(playerBoard, botBoard);
-                    //g.Hit(botBoard, playerBoard);
-                    //Console.WriteLine("Player's boards:");
-                    //ShowBoard(boardsize, playerBoard.MainBoard);
                     Console.WriteLine("Hits:");
                     ShowBoard(boardsize, playerBoard.HitsBoard);
                     Console.WriteLine("Enemy's boards:");
                     ShowBoard(boardsize, botBoard.MainBoard);
-                    //Console.WriteLine("Hits:");
-                    //ShowBoard(boardsize, botBoard.HitsBoard);
-
+                    
                     Console.WriteLine("State: " + g.State);
                 }
             }

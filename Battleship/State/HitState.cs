@@ -9,7 +9,6 @@ namespace Battleship
     public class HitState : IShipState
     {
         private Directions dir = Directions.UP;
-        private bool success = false;
         //Direction: 1 - Up, 3 - Down, 2 - Right, 4 - Left
         public void Hit(BattleshipBoard board, BattleshipBoard enemyBoard, Game game)
         {
@@ -22,7 +21,7 @@ namespace Battleship
                     ChangeCoordinates(ref y, ref x, dir);
                     if (enemyBoard.MainBoard[y, x] == 1)
                     {
-                        
+
                         board.HitsBoard[y, x] = 2;
                         enemyBoard.MainBoard[y, x] = 2;
                         game.HitX = x;

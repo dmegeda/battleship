@@ -36,7 +36,7 @@ namespace Battleship
             set { dir = value; }
         }
 
-        public List<ShipCells> CellsList = new List<ShipCells>();
+        public List<ShipCells> CellsList;
 
         public int DeckCount
         {
@@ -49,6 +49,7 @@ namespace Battleship
         //public int DeckCount { get { return deckCount; } }
         public Ship(int x, int y, ShipTypes shipType, Directions direction)
         {
+            CellsList = new List<ShipCells>();
             int deckCount = 0;
             switch (shipType)
             {
