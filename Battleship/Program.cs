@@ -13,32 +13,51 @@ namespace Battleship
             Console.Write("Choose board size: ");
             int boardsize = Convert.ToInt32(Console.ReadLine());
 
-            BattleshipBoard playerBoard = new BattleshipBoard(boardsize);
-            BattleshipBoard botBoard = new BattleshipBoard(boardsize);
+            BattleshipBoard firstPlayerBoard = new BattleshipBoard(boardsize);
+            BattleshipBoard secondPlayerBoard = new BattleshipBoard(boardsize);
             Random r = new Random();
-            playerBoard.AddShipToBoard(r);
-            botBoard.AddShipToBoard(r);
+            firstPlayerBoard.AddShipToBoard(r);
+            secondPlayerBoard.AddShipToBoard(r);
             //ShowBoard(boardsize, playerBoard.MainBoard);
             Console.WriteLine();
-            ShowBoard(boardsize, playerBoard.MainBoard);
-            Console.WriteLine();
-            ShowBoard(boardsize, botBoard.MainBoard);
+            ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+
             ConsoleKeyInfo key;
-            Game g = new Game(new NoHitState());
+            Game playerGame = new Game(new NoHitState());
+            Game botGame = new Game(new NoHitState());
             do
             {
                 key = Console.ReadKey();
                 if(key.Key == ConsoleKey.RightArrow)
                 {
+
                     Console.Clear();
-                    
-                    g.Hit(playerBoard, botBoard);
+
+                    if (playerGame.IsOver(firstPlayerBoard))
+                    {
+                        Console.WriteLine("Game over! Winner: Player2");
+                        Console.WriteLine("Player1:");
+                        ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+                        Console.WriteLine("Player2:");
+                        ShowBoard(boardsize, secondPlayerBoard.MainBoard);
+                        break;
+                    }
+                    else if(botGame.IsOver(secondPlayerBoard))
+                    {
+                        Console.WriteLine("Game over! Winner: Player1");
+                        Console.WriteLine("Player1:");
+                        ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+                        Console.WriteLine("Player2:");
+                        ShowBoard(boardsize, secondPlayerBoard.MainBoard);
+                        break;
+                    }
+
+                    playerGame.Hit(firstPlayerBoard, secondPlayerBoard);
+                    botGame.Hit(secondPlayerBoard, firstPlayerBoard);
+                    Console.WriteLine("Main:");
+                    ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                     Console.WriteLine("Hits:");
-                    ShowBoard(boardsize, playerBoard.HitsBoard);
-                    Console.WriteLine("Enemy's boards:");
-                    ShowBoard(boardsize, botBoard.MainBoard);
-                    
-                    Console.WriteLine("State: " + g.State);
+                    ShowBoard(boardsize, firstPlayerBoard.HitsBoard);                    
                 }
             }
             

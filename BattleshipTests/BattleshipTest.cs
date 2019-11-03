@@ -5,7 +5,7 @@ using System;
 namespace BattleshipTests
 {
     [TestClass]
-    public class ShipLocationTest
+    public class BattleshipTest
     {
         private int[,] GetBoard(int boardsize)
         {
@@ -25,37 +25,36 @@ namespace BattleshipTests
             int secondShipX = 4;
             int secondShipY = 9;
             int ctr = 0;
-            ShipSetter setter = ShipSetter.getInstance();
             Ship battleship = new Ship(firstShipX, firstShipY, ShipTypes.BATTLESHIP, Directions.UP);
             Ship boat = new Ship(secondShipX, secondShipY, ShipTypes.BOAT, Directions.LEFT);
+            BattleshipBoard playerBoard = new BattleshipBoard(10);
             while (ctr < battleship.DeckCount)
             {
                 board[firstShipY, firstShipX + ctr] = 1;
                 ctr++;
             }
-            Assert.IsFalse(setter.CheckCells(secondShipY, secondShipX, board, boat, Directions.LEFT));
+            Assert.IsFalse(playerBoard.CheckCells(secondShipY, secondShipX, board, boat.DeckCount, Directions.LEFT));
         }
+
         [TestMethod]
-        public void TestConcreteHit_HitUpShipX5Y5ContinueIfSuccessHit_X5Y4AndX5Y3Equals2()
+        public void TestHit_IfStateEqualsHitStateAndShipDestroyedChangeState_StateEqualsNoHitState()
         {
-            BattleshipBoard playerBoard = new BattleshipBoard(10);
-            BattleshipBoard enemyBoard = new BattleshipBoard(10);
-            //int[,] board = GetBoard(10);
-            int x = 5;
-            int y = 5;
-            Game game = new Game(new HitState());
-            Ship battleship = new Ship(ShipTypes.BATTLESHIP);
-            int ctr = 0;
-            while (ctr < battleship.DeckCount)
-            {
-                enemyBoard.MainBoard[y - ctr, x] = 1;
-                ctr++;
-            }
-            game.HitX = x;
-            game.HitY = y;
-            game.Hit(playerBoard, enemyBoard);
-            game.Hit(playerBoard, enemyBoard);
-            Assert.IsTrue(enemyBoard.MainBoard[4, 5] == 2 && enemyBoard.MainBoard[3, 5] == 2);
+            //IShipState noHitState = new NoHitState();
+            //IShipState hitState = new HitState();
+            //Game game = new Game(new HitState());
+            //BattleshipBoard firstBoard = new BattleshipBoard(10);
+            //BattleshipBoard secondBoard = new BattleshipBoard(10);
+            //Random r = new Random();
+            //secondBoard.AddShip(r, ShipTypes.DESTROYER);
+            //Ship hitship;
+            //foreach (var ship in secondBoard.ShipsList)
+            //{
+            //    hitship = ship;
+            //    ship.CellsList[0].X = game.HitX;
+            //    ship.CellsList[0].Y = game.HitY;
+            //    ship.CellsList[0].IsDestroyed = true; 
+            //}
+            //Assert.IsTrue(secondBoard.ShipsList[0].IsDestroyed());
         }
     }
 }

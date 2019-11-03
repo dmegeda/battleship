@@ -10,40 +10,50 @@ namespace Battleship
     {
         private Directions dir = Directions.UP;
         //Direction: 1 - Up, 3 - Down, 2 - Right, 4 - Left
-        public void Hit(BattleshipBoard board, BattleshipBoard enemyBoard, Game game)
+        public void Hit(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard, Game game)
         {
+            
             int x = game.HitX;
             int y = game.HitY;
-            if(x > 0 && x < enemyBoard.MainBoard.GetLength(0) - 1)
+            if(x > 0 && x < secondPlayerBoard.MainBoard.GetLength(0) - 1)
             {
-                if(y > 0 && y < enemyBoard.MainBoard.GetLength(0) - 1)
+                if(y > 0 && y < secondPlayerBoard.MainBoard.GetLength(0) - 1)
                 {
                     ChangeCoordinates(ref y, ref x, dir);
-                    if (enemyBoard.MainBoard[y, x] == 1)
+                    bool success = false;
+                    foreach (var cell in game.HitShip.CellsList)
                     {
-
-                        board.HitsBoard[y, x] = 2;
-                        enemyBoard.MainBoard[y, x] = 2;
-                        game.HitX = x;
-                        game.HitY = y;
+                        if (x == cell.X && y == cell.Y)
+                        {
+                            cell.Destroy();
+                            game.HitX = cell.X;
+                            game.HitY = cell.Y;
+                            success = true;
+                            break;
+                        }
+                        
+                    }
+                    if(success == true)
+                    {
+                        Draw.DrawHits(x, y, true, firstPlayerBoard, secondPlayerBoard);
+                        if (game.HitShip.IsDestroyed())
+                        {
+                            Draw.DrawAfterKill(firstPlayerBoard, secondPlayerBoard, game.HitShip);
+                            game.State = new NoHitState();
+                        }
                     }
                     else
                     {
-                        board.HitsBoard[y, x] = 3;
-                        if (dir == Directions.LEFT)
-                        {
-                            game.State = new NoHitState();
-                        }
-                        else
-                        {
-                            dir = ChangeDir(dir);
-                        }
+                        
+                        Draw.DrawHits(x, y, false, firstPlayerBoard, secondPlayerBoard);
+                        dir = ChangeDir(dir);
                         x = game.HitX;
                         y = game.HitY;
                     }
+
                 }
             }
-
+            
         }
         public void ChangeCoordinates(ref int y, ref int x, Directions dir)
         {

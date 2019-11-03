@@ -15,40 +15,18 @@ namespace Battleship
     }
     public class Ship
     {
-        //private int deckCount;
-        private int x;
-        private int y;
-        public int X
-        {
-            get { return x; }
-            set { x = value; }
-        }
-        public int Y
-        {
-            get { return y; }
-            set { y = value; }
-        }
-
-        private Directions dir;
-        public Directions Dir
-        {
-            get { return dir; }
-            set { dir = value; }
-        }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public Directions Dir { get; set; }
 
         public List<ShipCells> CellsList;
 
-        public int DeckCount
-        {
-            get
-            {
-                return CellsList.Count;
-            }
-        }
+        public int DeckCount => CellsList.Count;
 
         //public int DeckCount { get { return deckCount; } }
         public Ship(int x, int y, ShipTypes shipType, Directions direction)
         {
+            Dir = direction;
             CellsList = new List<ShipCells>();
             int deckCount = 0;
             switch (shipType)

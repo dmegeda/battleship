@@ -8,28 +8,55 @@ namespace Battleship
 {
     public class NoHitState : IShipState
     {
-
-        public void Hit(BattleshipBoard playerBoard, BattleshipBoard enemyBoard, Game game)
+        public void Hit(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard, Game game)
         {
             Random rnd = new Random();
-            int x = rnd.Next(0, playerBoard.BoardSize);
-            int y = rnd.Next(0, playerBoard.BoardSize);
-            if (playerBoard.HitsBoard[y, x] != 2 || playerBoard.HitsBoard[y, x] != 3)
+            int x = rnd.Next(0, firstPlayerBoard.BoardSize);
+            int y = rnd.Next(0, firstPlayerBoard.BoardSize);
+            if (firstPlayerBoard.HitsBoard[y, x] != 2 && firstPlayerBoard.HitsBoard[y, x] != 3)
             {
-                if (enemyBoard.MainBoard[y, x] == 1)
+                bool success = false;
+                foreach (var enemyShip in secondPlayerBoard.ShipsList)
                 {
-                    playerBoard.HitsBoard[y, x] = 2;
-                    enemyBoard.MainBoard[y, x] = 2;
+                    foreach (var cell in enemyShip.CellsList)
+                    {
+                        if (cell.X == x && cell.Y == y)
+                        {
+                            game.HitShip = enemyShip;
+                            cell.Destroy();
+                            if (!enemyShip.IsDestroyed())
+                            {
+                                game.State = new HitState();
+                            }
+                            else
+                            {
+                                if (game.HitShip.IsDestroyed())
+                                {
+                                    Draw.DrawAfterKill(firstPlayerBoard, secondPlayerBoard, game.HitShip);
+                                }
+                            }
+                            success = true;
+                            break;
+                        }
+                    }
+                }
+                if(success == true)
+                {
+                    Draw.DrawHits(x, y, true, firstPlayerBoard, secondPlayerBoard);
                     game.HitX = x;
                     game.HitY = y;
-                    
-                    game.State = new HitState();
-                    //Success hit
                 }
                 else
                 {
-                    playerBoard.HitsBoard[y, x] = 3;
-                    enemyBoard.MainBoard[y, x] = 3;
+                    Draw.DrawHits(x, y, false, firstPlayerBoard, secondPlayerBoard);
+                }
+            }
+            else
+            {
+                while(firstPlayerBoard.HitsBoard[y, x] == 2 || firstPlayerBoard.HitsBoard[y, x] == 3)
+                {
+                    x = rnd.Next(0, firstPlayerBoard.BoardSize);
+                    y = rnd.Next(0, firstPlayerBoard.BoardSize);
                 }
             }
         }
