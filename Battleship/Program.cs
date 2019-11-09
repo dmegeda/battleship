@@ -18,9 +18,17 @@ namespace Battleship
             Random r = new Random();
             firstPlayerBoard.AddShipToBoard(r);
             secondPlayerBoard.AddShipToBoard(r);
-            //ShowBoard(boardsize, playerBoard.MainBoard);
-            Console.WriteLine();
+            Draw.DrawAllShips(firstPlayerBoard);
             ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+
+            foreach (var ship in firstPlayerBoard.ShipsList)
+            {
+                Console.WriteLine("///////: ");
+                foreach (var cell in ship.CellsList)
+                {
+                    Console.WriteLine("X: " + cell.X + " Y:" + cell.Y);
+                }
+            }
 
             ConsoleKeyInfo key;
             Game playerGame = new Game(new NoHitState());
@@ -35,32 +43,32 @@ namespace Battleship
 
                     if (playerGame.IsOver(firstPlayerBoard))
                     {
+                        Console.Clear();
                         Console.WriteLine("Game over! Winner: Player2");
                         Console.WriteLine("Player1:");
                         ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                         Console.WriteLine("Player2:");
                         ShowBoard(boardsize, secondPlayerBoard.MainBoard);
-                        break;
+
                     }
-                    else if(botGame.IsOver(secondPlayerBoard))
+                    else if (botGame.IsOver(secondPlayerBoard))
                     {
+                        Console.Clear();
                         Console.WriteLine("Game over! Winner: Player1");
                         Console.WriteLine("Player1:");
                         ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                         Console.WriteLine("Player2:");
                         ShowBoard(boardsize, secondPlayerBoard.MainBoard);
-                        break;
-                    }
 
+                    }
                     playerGame.Hit(firstPlayerBoard, secondPlayerBoard);
                     botGame.Hit(secondPlayerBoard, firstPlayerBoard);
                     Console.WriteLine("Main:");
                     ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                     Console.WriteLine("Hits:");
-                    ShowBoard(boardsize, firstPlayerBoard.HitsBoard);                    
+                    ShowBoard(boardsize, firstPlayerBoard.HitsBoard);
                 }
-            }
-            
+            }  
             while (key.Key != ConsoleKey.Escape);
             
             Console.ReadKey();
