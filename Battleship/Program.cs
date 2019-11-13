@@ -9,7 +9,7 @@ namespace Battleship
     class Program
     {
         static void Main(string[] args)
-        {   
+        {
             Console.Write("Choose board size: ");
             int boardsize = Convert.ToInt32(Console.ReadLine());
 
@@ -19,16 +19,8 @@ namespace Battleship
             firstPlayerBoard.AddShipToBoard(r);
             secondPlayerBoard.AddShipToBoard(r);
             Draw.DrawAllShips(firstPlayerBoard);
+            Draw.DrawAllShips(secondPlayerBoard);
             ShowBoard(boardsize, firstPlayerBoard.MainBoard);
-
-            foreach (var ship in firstPlayerBoard.ShipsList)
-            {
-                Console.WriteLine("///////: ");
-                foreach (var cell in ship.CellsList)
-                {
-                    Console.WriteLine("X: " + cell.X + " Y:" + cell.Y);
-                }
-            }
 
             ConsoleKeyInfo key;
             Game playerGame = new Game(new NoHitState());
@@ -36,7 +28,7 @@ namespace Battleship
             do
             {
                 key = Console.ReadKey();
-                if(key.Key == ConsoleKey.RightArrow)
+                if (key.Key == ConsoleKey.RightArrow)
                 {
 
                     Console.Clear();
@@ -49,6 +41,7 @@ namespace Battleship
                         ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                         Console.WriteLine("Player2:");
                         ShowBoard(boardsize, secondPlayerBoard.MainBoard);
+                        break;
 
                     }
                     else if (botGame.IsOver(secondPlayerBoard))
@@ -59,6 +52,7 @@ namespace Battleship
                         ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                         Console.WriteLine("Player2:");
                         ShowBoard(boardsize, secondPlayerBoard.MainBoard);
+                        break;
 
                     }
                     playerGame.Hit(firstPlayerBoard, secondPlayerBoard);
@@ -68,10 +62,10 @@ namespace Battleship
                     Console.WriteLine("Hits:");
                     ShowBoard(boardsize, firstPlayerBoard.HitsBoard);
                 }
-            }  
+            }
             while (key.Key != ConsoleKey.Escape);
-            
-            Console.ReadKey();
+
+            Console.ReadLine();
         }
 
         public static void ShowBoard(int size, int [,] board)

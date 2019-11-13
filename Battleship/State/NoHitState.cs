@@ -10,6 +10,7 @@ namespace Battleship
     {
         public void Hit(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard, Game game)
         {
+            //Разбить на методы + сделать подмену для тестирования 
             Random rnd = new Random();
             int x = rnd.Next(0, firstPlayerBoard.BoardSize);
             int y = rnd.Next(0, firstPlayerBoard.BoardSize);

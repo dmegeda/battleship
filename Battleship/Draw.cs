@@ -9,43 +9,17 @@ namespace Battleship
     public static class Draw
     {
 
-        public static void DrawShip(BattleshipBoard board, Ship ship)
-        {
-            int x = 0;
-            int y = 0;
-            foreach (var cell in ship.CellsList)
-            {
-                try
-                {
-                    board.MainBoard[cell.Y, cell.X] = 1;
-                    y = cell.Y;
-                    x = cell.X;
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("Cell: y" + y + " x" + x);
-                }
-            }
-        }
-
         public static void DrawAllShips(BattleshipBoard board)
         {
             int x = 0;
             int y = 0;
             foreach (var ship in board.ShipsList)
             {
-                try
+                foreach (var cell in ship.CellsList)
                 {
-                    foreach (var cell in ship.CellsList)
-                    {
-                        board.MainBoard[cell.Y, cell.X] = 1;
-                        x = cell.X;
-                        y = cell.Y;
-                    }
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("" + x + " " + y);
+                    board.MainBoard[cell.Y, cell.X] = 1;
+                    x = cell.X;
+                    y = cell.Y;
                 }
             }
         }
@@ -75,7 +49,7 @@ namespace Battleship
             }
         }
 
-        public static void DrawAfterKill(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard,Ship ship)
+        public static void DrawAfterKill(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard, Ship ship)
         {
 
             foreach (var cell in ship.CellsList)

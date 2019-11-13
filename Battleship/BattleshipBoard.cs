@@ -8,27 +8,26 @@ namespace Battleship
 {
     public class BattleshipBoard
     {
+        //Убрать в Draw
         public int BoardSize { get; set; }
         public int[,] MainBoard { get; set; }
         public int[,] HitsBoard { get; set; }
-
+        //
         public List<Ship> ShipsList { get; set; }
+        private List<ShipCells> combinedCells = new List<ShipCells>();
         public BattleshipBoard(int boardsize)
         {
             ShipsList = new List<Ship>();
             BoardSize = boardsize;
             Draw.DrawBoards(boardsize, this);
+            CombineCells(boardsize, combinedCells);
         }
         public void AddShipToBoard(Random r)
         {
-            AddShip(CreateShip(r, ShipTypes.BOAT));
+            //AddShip(CreateShip(r, ShipTypes.BOAT));
             AddShip(CreateShip(r, ShipTypes.DESTROYER));
-            AddShip(CreateShip(r, ShipTypes.CRUISER));
-            AddShip(CreateShip(r, ShipTypes.BATTLESHIP));
-            //Ship ship1 = CreateShip(r, ShipTypes.BATTLESHIP);
-            //Ship ship2 = CreateShip(r, ShipTypes.CRUISER);
-            //CreateShip(r, ShipTypes.BATTLESHIP);
-            //CreateShip(r, ShipTypes.CRUISER);
+            //AddShip(CreateShip(r, ShipTypes.CRUISER));
+            //AddShip(CreateShip(r, ShipTypes.BATTLESHIP));
         }
 
         public void AddShip(Ship ship)
@@ -37,64 +36,60 @@ namespace Battleship
         }
 
         public Ship CreateShip(Random r, ShipTypes shipType)
-        {   
+        {
+            List<ShipCells> cells = combinedCells;
+            //CombineCells(BoardSize, combinedCells);
             bool success;
             int max = MainBoard.GetLength(0) - 2;
             int min = 1;
             int dirCount = 4;
-            int x = r.Next(min, max);
-            int y = r.Next(min, max);
-
+            int i = r.Next(cells.Count);
+            ShipCells c = combinedCells[i];
+            int x = c.X;
+            int y = c.Y;
             int dirNum = r.Next(0, dirCount);
             Directions dir = (Directions)dirNum;
             int deckCount = GetDeckCount(shipType);
-            //Ship ship = new Ship(x, y, shipType, dir);
-            Ship ship;
-            success = CheckCells(y, x, this, deckCount, dir);
-            while (success == false)
-            {
-                x = r.Next(min, max);
-                y = r.Next(min, max);
-                dirNum = r.Next(0, dirCount);
-                success = CheckCells(y, x, this, deckCount, dir);
-            }
-            //if (success == true)
-            //{
-
-            //}
-            ship = new Ship(x, y, shipType, dir);
-            //Ship ship = new Ship(x, y, shipType, dir);
-            //Draw.DrawShip(this, ship);
-            //ShipsList.Add(ship);
-            return ship;
-        }
-
-        public void AddShip(Random r, ShipTypes shipType)
-        {
-            bool success;
-            int max = MainBoard.GetLength(0) - 2;
-            int min = 1;
-            int dirCount = 4;
-            int x = r.Next(min, max);
-            int y = r.Next(min, max);
-            int dirNum = r.Next(0, dirCount);
-            Directions dir = (Directions)dirNum;
-            Ship ship = new Ship(x, y, shipType, dir);
             success = CheckCells(y, x, this, GetDeckCount(shipType), dir);
+            //Вынести отдельно 
             while (success == false)
             {
-                x = r.Next(min, max);
-                y = r.Next(min, max);
-                dirNum = r.Next(0, dirCount);
-                success = CheckCells(y, x, this, ship.DeckCount, dir);
+                int dirN = 0;
+                bool suc = false;
+                while (dirN < 4)
+                {
+                    
+                    Directions newDir = (Directions)dirN;
+                    success = CheckCells(y, x, this, deckCount, newDir);
+                    if (success == true)
+                    {
+                        dir = (Directions)dirN;
+                        suc = true;       
+                    }
+                    dirN++;
+                }
+                if (suc != true)
+                {
+                    cells.RemoveAt(i);
+                    dirNum = r.Next(0, 4);
+                    dir = (Directions)dirNum;
+                    i = r.Next(cells.Count);
+                    c = cells[i];
+                    x = c.X;
+                    y = c.Y;
+                    success = CheckCells(y, x, this, deckCount, dir);
+                }
+                else { break; }
+                
             }
-            ship = new Ship(x, y, shipType, dir);
-            ShipsList.Add(ship);
-            Draw.DrawShip(this, ship);
+            Ship ship = new Ship(x, y, shipType, dir);
+            //ShipsList.Add(ship);
+            //Draw.DrawShip(this, ship);
+            return ship;
         }
         public int GetDeckCount(ShipTypes shipType)
         {
-            int deckCount = 0;
+            int deckCount = 1;
             switch (shipType)
             {
                 case ShipTypes.BOAT:
@@ -212,21 +207,23 @@ namespace Battleship
                 {
                     foreach (var cell in ship.CellsList)
                     {
-                        if (y > 0 && y < board.BoardSize - 1 && x > 0 && y < board.BoardSize - 1)
+                        if (y > 0 && y < board.BoardSize - 1 && x > 0 && x < board.BoardSize - 1)
                         {
                             for (int i = 0; i < cells.Count; i++)
                             {
-                                if (cell.X != cells[i].X && cell.Y != cells[i].Y)
+                                if (cell.X != cells[i].X || cell.Y != cells[i].Y)
                                 {
-                                   
                                 }
                                 else
                                 {
                                     check = false;
                                 }
                             }
-
                         }
+                        //else if(y == 0 && x > 0 && x < board.BoardSize - 1)
+                        //{
+
+                        //}
                     }
                 }
                 success = check;
@@ -234,6 +231,20 @@ namespace Battleship
             else { success = true; }
             
             return success;
+        }
+        //
+        public void CombineCells(int max, List<ShipCells> cells)
+        {
+            int x = 1;
+            int y = 1;
+            for (int i = 0; i < max - 2; i++)
+            {
+                for (int j = 0; j < max - 2; j++)
+                {
+                    ShipCells c = new ShipCells(x + i, y + j);
+                    cells.Add(c);
+                }
+            }
         }
     }
 }

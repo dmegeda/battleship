@@ -8,6 +8,6 @@ namespace Battleship
 {
     public interface IShipState
     {
-        void Hit(BattleshipBoard playerBoard, BattleshipBoard botBoard, Game game);
+        void Hit(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard, Game game);
     }
 }

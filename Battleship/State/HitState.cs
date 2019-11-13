@@ -38,6 +38,7 @@ namespace Battleship
                         Draw.DrawHits(x, y, true, firstPlayerBoard, secondPlayerBoard);
                         if (game.HitShip.IsDestroyed())
                         {
+                            IShipState state = new NoHitState();
                             Draw.DrawAfterKill(firstPlayerBoard, secondPlayerBoard, game.HitShip);
                             game.State = new NoHitState();
                         }
