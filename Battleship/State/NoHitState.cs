@@ -24,7 +24,7 @@ namespace Battleship
                 {
                     foreach (var cell in enemyShip.CellsList)
                     {
-                        if (cell == randomCell)
+                        if (cell.X == x && cell.Y == y)
                         {
                             game.HitShip = enemyShip;
                             cell.Destroy();

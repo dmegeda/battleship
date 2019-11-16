@@ -39,8 +39,8 @@ namespace Battleship
             List<Cell> cells = combinedCells;
             bool success;
             int dirCount = 4;
-            int i = r.Next(cells.Count);
-            Cell c = combinedCells[i];
+            int numOfCell = r.Next(cells.Count - 1);
+            Cell c = combinedCells[numOfCell];
             int x = c.X;
             int y = c.Y;
             int dirNum = r.Next(0, dirCount);
@@ -51,7 +51,7 @@ namespace Battleship
             {                
                 if (CheckAllDirections(x, y, deckCount, ref dir) != true)
                 {
-                    cells.RemoveAt(i);
+                    cells.RemoveAt(numOfCell);
                     SetNewCoordinates(r, cells, deckCount, ref x, ref y, ref dir);
                     success = CheckCells(y, x, this, deckCount, dir);
                 }
@@ -64,8 +64,8 @@ namespace Battleship
         {
             int dirNum = r.Next(0, 4);
             dir = (Directions)dirNum;
-            int i = r.Next(cells.Count);
-            Cell c = cells[i];
+            int numOfCells = r.Next(cells.Count);
+            Cell c = cells[numOfCells];
             x = c.X;
             y = c.Y;
         }
@@ -73,7 +73,8 @@ namespace Battleship
         {
             int dirNum = 0;
             bool success = false;
-            while (dirNum < 4)
+            int dirCount = 4;
+            while (dirNum < dirCount)
             {
 
                 Directions newDir = (Directions)dirNum;

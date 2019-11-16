@@ -12,7 +12,7 @@ namespace Battleship
         {
             Console.Write("Choose board size: ");
             int boardsize = Convert.ToInt32(Console.ReadLine());
-
+            
             BattleshipBoard firstPlayerBoard = new BattleshipBoard(boardsize);
             BattleshipBoard secondPlayerBoard = new BattleshipBoard(boardsize);
             Random r = new Random();
@@ -24,7 +24,7 @@ namespace Battleship
 
             ConsoleKeyInfo key;
             Game playerGame = new Game(new NoHitState());
-            Game botGame = new Game(new NoHitState());
+            Game enemyGame = new Game(new NoHitState());
             do
             {
                 key = Console.ReadKey();
@@ -41,10 +41,22 @@ namespace Battleship
                         ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                         Console.WriteLine("Player2:");
                         ShowBoard(boardsize, secondPlayerBoard.MainBoard);
+                        key = Console.ReadKey();
+                        if (key.Key == ConsoleKey.F)
+                        {
+                            Console.Clear();
+                            firstPlayerBoard = new BattleshipBoard(boardsize);
+                            secondPlayerBoard = new BattleshipBoard(boardsize);
+                            firstPlayerBoard.AddShipToBoard(r);
+                            secondPlayerBoard.AddShipToBoard(r);
+                            Draw.DrawAllShips(firstPlayerBoard);
+                            Draw.DrawAllShips(secondPlayerBoard);
+                            ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+                        }
                         break;
 
                     }
-                    else if (botGame.IsOver(secondPlayerBoard))
+                    else if (enemyGame.IsOver(secondPlayerBoard))
                     {
                         Console.Clear();
                         Console.WriteLine("Game over! Winner: Player1");
@@ -56,7 +68,7 @@ namespace Battleship
 
                     }
                     playerGame.Hit(firstPlayerBoard, secondPlayerBoard);
-                    botGame.Hit(secondPlayerBoard, firstPlayerBoard);
+                    enemyGame.Hit(secondPlayerBoard, firstPlayerBoard);
                     Console.WriteLine("Main:");
                     ShowBoard(boardsize, firstPlayerBoard.MainBoard);
                     Console.WriteLine("Hits:");
@@ -64,8 +76,6 @@ namespace Battleship
                 }
             }
             while (key.Key != ConsoleKey.Escape);
-
-            Console.ReadLine();
         }
 
         public static void ShowBoard(int size, int [,] board)
