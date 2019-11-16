@@ -46,7 +46,7 @@
     <Compile Include="Directions.cs" />
     <Compile Include="BattleshipBoard.cs" />
     <Compile Include="Draw.cs" />
-    <Compile Include="ShipCells.cs" />
+    <Compile Include="Cell.cs" />
     <Compile Include="State\HitState.cs" />
     <Compile Include="State\Game.cs" />
     <Compile Include="State\IShipState.cs" />

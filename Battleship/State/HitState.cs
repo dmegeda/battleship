@@ -33,29 +33,30 @@ namespace Battleship
                         }
                         
                     }
-                    if(success == true)
-                    {
-                        Draw.DrawHits(x, y, true, firstPlayerBoard, secondPlayerBoard);
-                        if (game.HitShip.IsDestroyed())
-                        {
-                            IShipState state = new NoHitState();
-                            Draw.DrawAfterKill(firstPlayerBoard, secondPlayerBoard, game.HitShip);
-                            game.State = new NoHitState();
-                        }
-                    }
-                    else
-                    {
-                        
-                        Draw.DrawHits(x, y, false, firstPlayerBoard, secondPlayerBoard);
-                        dir = ChangeDir(dir);
-                        x = game.HitX;
-                        y = game.HitY;
-                    }
-
+                    ActionAfterHit(success, game, ref x, ref y, firstPlayerBoard, secondPlayerBoard);      
                 }
             }
             
         }
+        public void ActionAfterHit(bool success, Game game, ref int x, ref int y, BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard)
+        {
+            if (success == true)
+            {
+                if (game.HitShip.IsDestroyed())
+                {
+                    Draw.DrawAfterKill(firstPlayerBoard, secondPlayerBoard, game.HitShip);
+                    game.State = new NoHitState();
+                }
+            }
+            else
+            {
+                dir = ChangeDir(dir);
+                x = game.HitX;
+                y = game.HitY;
+            }
+            Draw.DrawHits(x, y, success, firstPlayerBoard, secondPlayerBoard);
+        }
+
         public void ChangeCoordinates(ref int y, ref int x, Directions dir)
         {
             switch (dir)

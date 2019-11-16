@@ -8,7 +8,6 @@ namespace Battleship
 {
     public static class Draw
     {
-
         public static void DrawAllShips(BattleshipBoard board)
         {
             int x = 0;
@@ -17,9 +16,16 @@ namespace Battleship
             {
                 foreach (var cell in ship.CellsList)
                 {
-                    board.MainBoard[cell.Y, cell.X] = 1;
-                    x = cell.X;
-                    y = cell.Y;
+                    try
+                    {
+                        board.MainBoard[cell.Y, cell.X] = 1;
+                        x = cell.X;
+                        y = cell.Y;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("" + cell.X + " " + cell.Y);
+                    }
                 }
             }
         }

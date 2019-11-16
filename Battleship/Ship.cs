@@ -19,7 +19,7 @@ namespace Battleship
         public int Y { get; set; }
         public Directions Dir { get; set; }
 
-        public List<ShipCells> CellsList;
+        public List<Cell> CellsList;
 
         public int DeckCount => CellsList.Count;
 
@@ -27,7 +27,7 @@ namespace Battleship
         public Ship(int x, int y, ShipTypes shipType, Directions direction)
         {
             Dir = direction;
-            CellsList = new List<ShipCells>();
+            CellsList = new List<Cell>();
             int deckCount = 0;
             switch (shipType)
             {
@@ -49,25 +49,25 @@ namespace Battleship
                 case Directions.UP:
                     for (int i = 0; i < deckCount; i++)
                     {
-                        CellsList.Add(new ShipCells(x, y - i));
+                        CellsList.Add(new Cell(x, y - i));
                     }
                     break;
                 case Directions.RIGHT:
                     for (int i = 0; i < deckCount; i++)
                     {
-                        CellsList.Add(new ShipCells(x + i, y));
+                        CellsList.Add(new Cell(x + i, y));
                     }
                     break;
                 case Directions.DOWN:
                     for (int i = 0; i < deckCount; i++)
                     {
-                        CellsList.Add(new ShipCells(x, y + i));
+                        CellsList.Add(new Cell(x, y + i));
                     }
                     break;
                 case Directions.LEFT:
                     for (int i = 0; i < deckCount; i++)
                     {
-                        CellsList.Add(new ShipCells(x - i, y));
+                        CellsList.Add(new Cell(x - i, y));
                     }
                     break;
             }

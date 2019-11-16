@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Battleship
 {
-    public class ShipCells
+    public class Cell
     {
         public int X { get; set; }
 
@@ -14,7 +14,7 @@ namespace Battleship
 
         public bool IsDestroyed { get; set; }
 
-        public ShipCells(int x, int y)
+        public Cell(int x, int y)
         {
             X = x;
             Y = y;
