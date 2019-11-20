@@ -8,8 +8,8 @@ namespace Battleship
 {
     public class BattleshipBoard
     {
-        //Убрать в Draw
         public int BoardSize { get; set; }
+        //
         public int[,] MainBoard { get; set; }
         public int[,] HitsBoard { get; set; }
         //
@@ -209,10 +209,7 @@ namespace Battleship
                         {
                             for (int i = 0; i < cells.Count; i++)
                             {
-                                if (cell.X != cells[i].X || cell.Y != cells[i].Y)
-                                {
-                                }
-                                else
+                                if (!(cell.X != cells[i].X || cell.Y != cells[i].Y))
                                 {
                                     check = false;
                                 }

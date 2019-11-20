@@ -10,74 +10,78 @@ namespace Battleship
     {
         static void Main(string[] args)
         {
-            Console.Write("Choose board size: ");
-            int boardsize = Convert.ToInt32(Console.ReadLine());
+            int boardsize;
+            while (true)
+            {
+                Console.Clear();
+                try
+                {
+                    Console.Write("Choose board size: ");
+                    boardsize = Convert.ToInt32(Console.ReadLine());
+                    break;
+                }
+                catch (Exception)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Incorrect input! \nPress any key to try again.");
+                }
+                Console.ReadKey();
+                
+            }
             
-            BattleshipBoard firstPlayerBoard = new BattleshipBoard(boardsize);
-            BattleshipBoard secondPlayerBoard = new BattleshipBoard(boardsize);
+            BattleshipBoard firstBoard = new BattleshipBoard(boardsize);
+            BattleshipBoard secondBoard = new BattleshipBoard(boardsize);
             Random r = new Random();
-            firstPlayerBoard.AddShipToBoard(r);
-            secondPlayerBoard.AddShipToBoard(r);
-            Draw.DrawAllShips(firstPlayerBoard);
-            Draw.DrawAllShips(secondPlayerBoard);
-            ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+            firstBoard.AddShipToBoard(r);
+            secondBoard.AddShipToBoard(r);
+            Draw.DrawAllShips(firstBoard);
+            Draw.DrawAllShips(secondBoard);
+            ShowBoard(boardsize, firstBoard.MainBoard);
 
             ConsoleKeyInfo key;
-            Game playerGame = new Game(new NoHitState());
-            Game enemyGame = new Game(new NoHitState());
+            Game firstGame = new Game(new NoHitState());
+            Game secondGame = new Game(new NoHitState());
             do
             {
                 key = Console.ReadKey();
                 if (key.Key == ConsoleKey.RightArrow)
                 {
-
                     Console.Clear();
-
-                    if (playerGame.IsOver(firstPlayerBoard))
+                    if (firstGame.IsOver(firstBoard) == true || secondGame.IsOver(secondBoard) == true)
                     {
-                        Console.Clear();
-                        Console.WriteLine("Game over! Winner: Player2");
-                        Console.WriteLine("Player1:");
-                        ShowBoard(boardsize, firstPlayerBoard.MainBoard);
-                        Console.WriteLine("Player2:");
-                        ShowBoard(boardsize, secondPlayerBoard.MainBoard);
-                        key = Console.ReadKey();
-                        if (key.Key == ConsoleKey.F)
-                        {
-                            Console.Clear();
-                            firstPlayerBoard = new BattleshipBoard(boardsize);
-                            secondPlayerBoard = new BattleshipBoard(boardsize);
-                            firstPlayerBoard.AddShipToBoard(r);
-                            secondPlayerBoard.AddShipToBoard(r);
-                            Draw.DrawAllShips(firstPlayerBoard);
-                            Draw.DrawAllShips(secondPlayerBoard);
-                            ShowBoard(boardsize, firstPlayerBoard.MainBoard);
-                        }
+                        GameOver(firstBoard, secondBoard, firstGame, secondGame);
                         break;
-
                     }
-                    else if (enemyGame.IsOver(secondPlayerBoard))
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Game over! Winner: Player1");
-                        Console.WriteLine("Player1:");
-                        ShowBoard(boardsize, firstPlayerBoard.MainBoard);
-                        Console.WriteLine("Player2:");
-                        ShowBoard(boardsize, secondPlayerBoard.MainBoard);
-                        break;
-
-                    }
-                    playerGame.Hit(firstPlayerBoard, secondPlayerBoard);
-                    enemyGame.Hit(secondPlayerBoard, firstPlayerBoard);
+                    firstGame.Hit(firstBoard, secondBoard);
+                    secondGame.Hit(secondBoard, firstBoard);
                     Console.WriteLine("Main:");
-                    ShowBoard(boardsize, firstPlayerBoard.MainBoard);
+                    ShowBoard(boardsize, firstBoard.MainBoard);
                     Console.WriteLine("Hits:");
-                    ShowBoard(boardsize, firstPlayerBoard.HitsBoard);
+                    ShowBoard(boardsize, firstBoard.HitsBoard);
                 }
             }
             while (key.Key != ConsoleKey.Escape);
         }
-
+        public static void GameOver(BattleshipBoard firstPlayerBoard, BattleshipBoard secondPlayerBoard, Game playerGame, Game enemyGame)
+        {
+            Console.Clear();
+            string player1Won = "Winner: Player1";
+            string player2Won = "Winner: Player2";
+            string finalString = "Game over! ";
+            if (playerGame.IsOver(firstPlayerBoard))
+            {
+                finalString += player2Won;
+            }
+            else if (enemyGame.IsOver(secondPlayerBoard))
+            {
+                finalString += player1Won;
+            }
+            Console.WriteLine(finalString);
+            Console.WriteLine("Player1:");
+            ShowBoard(firstPlayerBoard.BoardSize, firstPlayerBoard.MainBoard);
+            Console.WriteLine("Player2:");
+            ShowBoard(secondPlayerBoard.BoardSize, secondPlayerBoard.MainBoard);
+        }
         public static void ShowBoard(int size, int [,] board)
         {
             for (int i = 0; i < size; i++)
