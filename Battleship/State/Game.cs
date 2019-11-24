@@ -8,19 +8,8 @@ namespace Battleship
 {
     public class Game
     {
-        private int hitX;
-        private int hitY;
-
-        public int HitX
-        {
-            get { return hitX; }
-            set { hitX = value; }
-        }
-        public int HitY
-        {
-            get { return hitY; }
-            set { hitY = value; }
-        }
+        public int HitX { get; set; }
+        public int HitY { get; set; }
         public IShipState State { get; set; }
 
         public Ship HitShip { get; set; }

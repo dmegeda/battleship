@@ -9,18 +9,19 @@ namespace Battleship
     public class BattleshipBoard
     {
         public int BoardSize { get; set; }
-        //
+        //---
         public int[,] MainBoard { get; set; }
         public int[,] HitsBoard { get; set; }
-        //
+        //---
         public List<Ship> ShipsList { get; set; }
-        private List<Cell> combinedCells = new List<Cell>();
+        private List<Cell> allPossibleCells = new List<Cell>();
+        private List<Cell> cellsForCheck = new List<Cell>();
         public BattleshipBoard(int boardsize)
         {
             ShipsList = new List<Ship>();
             BoardSize = boardsize;
             Draw.DrawBoards(boardsize, this);
-            CombineCells(boardsize, combinedCells);
+            SetAllPossibleCells(boardsize, allPossibleCells);
         }
 
         public void AddShipToBoard(Random r)
@@ -36,23 +37,22 @@ namespace Battleship
         }
         public Ship CreateShip(Random r, ShipTypes shipType)
         {
-            List<Cell> cells = combinedCells;
-            bool success;
+            List<Cell> possibleCells = allPossibleCells;
             int dirCount = 4;
-            int numOfCell = r.Next(cells.Count - 1);
-            Cell c = combinedCells[numOfCell];
-            int x = c.X;
-            int y = c.Y;
+            int numOfCell = r.Next(possibleCells.Count - 1);
+            Cell cell = possibleCells[numOfCell];
+            int x = cell.X;
+            int y = cell.Y;
             int dirNum = r.Next(0, dirCount);
             Directions dir = (Directions)dirNum;
             int deckCount = GetDeckCount(shipType);
-            success = CheckCells(y, x, this, GetDeckCount(shipType), dir);
+            bool success = CheckCells(y, x, this, GetDeckCount(shipType), dir);
             while (success == false)
             {                
                 if (CheckAllDirections(x, y, deckCount, ref dir) != true)
                 {
-                    cells.RemoveAt(numOfCell);
-                    SetNewCoordinates(r, cells, deckCount, ref x, ref y, ref dir);
+                    possibleCells.RemoveAt(numOfCell);
+                    SetNewCoordinates(r, possibleCells, deckCount, ref x, ref y, ref dir, ref numOfCell);
                     success = CheckCells(y, x, this, deckCount, dir);
                 }
                 else { break; }
@@ -60,14 +60,14 @@ namespace Battleship
             Ship ship = new Ship(x, y, shipType, dir);
             return ship;
         }
-        public void SetNewCoordinates(Random r, List<Cell> cells, int deckCount, ref int x, ref int y, ref Directions dir)
+        public void SetNewCoordinates(Random r, List<Cell> cells, int deckCount, ref int x, ref int y, ref Directions dir, ref int numOfCell)
         {
             int dirNum = r.Next(0, 4);
             dir = (Directions)dirNum;
-            int numOfCells = r.Next(cells.Count);
-            Cell c = cells[numOfCells];
-            x = c.X;
-            y = c.Y;
+            numOfCell = r.Next(cells.Count - 1);
+            Cell cell = cells[numOfCell];
+            x = cell.X;
+            y = cell.Y;
         }
         public bool CheckAllDirections(int x, int y, int deckCount, ref Directions dir)
         {
@@ -82,6 +82,7 @@ namespace Battleship
                 {
                     dir = (Directions)dirNum;
                     success = true;
+                    break;
                 }
                 dirNum++;
             }
@@ -110,9 +111,9 @@ namespace Battleship
         public bool CheckCells(int y, int x, BattleshipBoard board, int shipDeckCount, Directions dir)
         {
             
-            bool success;
+            bool finalSuccess;
             bool check = false;
-            bool suc = true;
+            bool success = true;
             switch (dir)
             {
                 case Directions.UP:
@@ -123,12 +124,12 @@ namespace Battleship
                             check = CheckSquare(y, x, this);
                             if (check == false)
                             {
-                                suc = false;
+                                success = false;
                             }
                             y--;
                         }
                     }
-                    else { suc = false; }
+                    else { success = false; }
                     break;
                 case Directions.RIGHT:
                     if (x + shipDeckCount <= board.BoardSize - 1)
@@ -138,12 +139,12 @@ namespace Battleship
                             check = CheckSquare(y, x, this);
                             if (check == false)
                             {
-                                suc = false;
+                                success = false;
                             }
                             x++;
                         }
                     }
-                    else { suc = false; }
+                    else { success = false; }
                     break;
                 case Directions.DOWN:
                     if (y + shipDeckCount <= board.BoardSize - 1)
@@ -153,12 +154,12 @@ namespace Battleship
                             check = CheckSquare(y, x, this);
                             if (check == false)
                             {
-                                suc = false;
+                                success = false;
                             }
                             y++;
                         }
                     }
-                    else { suc = false; }
+                    else { success = false; }
                     break;
                 case Directions.LEFT:
                     if (x - shipDeckCount >= 0)
@@ -168,20 +169,21 @@ namespace Battleship
                             check = CheckSquare(y, x, this);
                             if (check == false)
                             {
-                                suc = false;
+                                success = false;
                             }
                             x--;
                         }
                     }
-                    else { suc = false; }
+                    else { success = false; }
                     break;
             }
-            success = suc;
-            return success;
+            finalSuccess = success;
+            return finalSuccess;
             
         }
         public bool CheckSquare(int y, int x, BattleshipBoard board)
         {
+            //---
             Cell cellCenter = new Cell(x, y);
             Cell cellCenterUp = new Cell(x, y - 1);
             Cell cellCenterDown = new Cell(x, y + 1);
@@ -196,7 +198,7 @@ namespace Battleship
 
             List<Cell> cells = new List<Cell>() { cellCenter, cellCenterDown, cellCenterLeft, cellCenterRight,
                 cellCenterUp, cellDownLeft, cellUpLeft, cellUpRight, cellDownRight };
-
+            //---
             bool success = false;
             bool check = true;
             if (board.ShipsList.Count != 0)
@@ -219,11 +221,10 @@ namespace Battleship
                 }
                 success = check;
             }
-            else { success = true; }
-            
+            else { success = true; }  
             return success;
         }
-        public void CombineCells(int max, List<Cell> cells)
+        public void SetAllPossibleCells(int max, List<Cell> possibleCells)
         {
             int x = 1;
             int y = 1;
@@ -231,8 +232,8 @@ namespace Battleship
             {
                 for (int j = 0; j < max - 2; j++)
                 {
-                    Cell c = new Cell(x + i, y + j);
-                    cells.Add(c);
+                    Cell cell = new Cell(x + i, y + j);
+                    possibleCells.Add(cell);
                 }
             }
         }

@@ -29,6 +29,7 @@ namespace Battleship
                 
             }
             
+            
             BattleshipBoard firstBoard = new BattleshipBoard(boardsize);
             BattleshipBoard secondBoard = new BattleshipBoard(boardsize);
             Random r = new Random();
